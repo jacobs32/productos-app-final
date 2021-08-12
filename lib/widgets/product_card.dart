@@ -25,6 +25,7 @@ class ProductCard extends StatelessWidget {
               child: _PriceTag(),
             ),
 
+            // ignore: todo
             // TODO: Mostrar de manera condicional
             Positioned(
               top: 0,
