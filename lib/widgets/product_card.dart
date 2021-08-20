@@ -19,19 +19,15 @@ class ProductCard extends StatelessWidget {
           alignment: Alignment.bottomLeft,
           children: [
             _BackgroundImage(product.picture),
-
             _ProductDetails(
               title: product.name,
               subTitle: product.id!,
             ),
-
             Positioned(
               top: 0,
               right: 0,
               child: _PriceTag(product.price),
             ),
-
-            // TODO: Mostrar de manera condicional
             if (!product.available)
               Positioned(
                 top: 0,
@@ -130,7 +126,6 @@ class _ProductDetails extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         width: double.infinity,
         height: 70,
-        color: Colors.indigo,
         decoration: _buildBoxDecoration(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -177,12 +172,13 @@ class _BackgroundImage extends StatelessWidget {
       child: Container(
         width: double.infinity,
         height: 400,
-        child: FadeInImage(
-          //TODO: Fix los productos que no tienen imagen
-          placeholder: AssetImage('assets/jar-loading.gif'),
-          image: NetworkImage('https://via.placeholder.com/400x300/f6f6f6'),
-          fit: BoxFit.cover,
-        ),
+        child: url == null
+            ? Image(image: AssetImage('assets/no-image.png'), fit: BoxFit.cover)
+            : FadeInImage(
+                placeholder: AssetImage('assets/jar-loading.gif'),
+                image: NetworkImage(url!),
+                fit: BoxFit.cover,
+              ),
       ),
     );
   }
