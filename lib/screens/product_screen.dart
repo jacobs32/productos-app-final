@@ -31,6 +31,8 @@ class _ProductScreenBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final productForm = Provider.of<ProductFormProvider>(context);
+
     return Scaffold(
       body: SingleChildScrollView(
         //keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -40,7 +42,7 @@ class _ProductScreenBody extends StatelessWidget {
               children: [
                 ProductImage(url: productService.selectedProduct.picture),
                 Positioned(
-                    top: 20,
+                    top: 60,
                     right: 20,
                     child: IconButton(
                       onPressed: () => Navigator.of(context).pop(),
@@ -73,8 +75,11 @@ class _ProductScreenBody extends StatelessWidget {
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.save_outlined),
-        onPressed: () {
+        onPressed: () async {
           //TODO: Guardar producto
+          if (!productForm.isValidForm()) return;
+
+          productService.saveOrCreateProduct(productForm.product);
         },
       ),
     );
@@ -95,6 +100,8 @@ class _ProductForm extends StatelessWidget {
         height: 220,
         decoration: _buildBoxDecoration(),
         child: Form(
+          key: ProductForm.formKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           child: Column(
             children: [
               SizedBox(height: 10),
@@ -110,7 +117,7 @@ class _ProductForm extends StatelessWidget {
                   labelText: 'Nombre:',
                 ),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 30),
               TextFormField(
                 initialValue: '${product.price}',
                 inputFormatters: [
@@ -134,7 +141,7 @@ class _ProductForm extends StatelessWidget {
                   labelText: 'Precio:',
                 ),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 30),
               SwitchListTile.adaptive(
                 value: product.available,
                 title: Text('Disponible'),
