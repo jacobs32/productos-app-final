@@ -75,7 +75,7 @@ class ProductsService extends ChangeNotifier {
     product.id = decodeData['name'];
 
     this.products.add(product);
-    //Crear el listado de productos
+    //Crear el '+' para listado de productos
 
     return product.id!;
   }
