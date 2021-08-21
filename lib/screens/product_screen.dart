@@ -62,13 +62,15 @@ class _ProductScreenBody extends StatelessWidget {
 
                         final picker = new ImagePicker();
                         final PickedFile? pickedFile = await picker.getImage(
-                            source: ImageSource.camera, imageQuality: 100);
+                            source: ImageSource.gallery, imageQuality: 100);
 
                         if (pickedFile == null) {
                           print('No seleccionó nada');
                           return;
                         }
                         print('Tenemos imagen ${pickedFile.path}');
+                        productService
+                            .updateSelectedProductImage(pickedFile.path);
                       },
                       icon: Icon(
                         Icons.camera_alt_outlined,
