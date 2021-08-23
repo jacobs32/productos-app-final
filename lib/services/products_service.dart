@@ -94,6 +94,7 @@ class ProductsService extends ChangeNotifier {
     if (this.newPictureFile == null) return null;
 
     this.isSaving = true;
+    notifyListeners();
 
     final url = Uri.parse(
         'https://api.cloudinary.com/v1_1/jacobs32/image/upload?upload_preset=a93use7h');

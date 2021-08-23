@@ -44,7 +44,7 @@ class _ProductScreenBody extends StatelessWidget {
                 ProductImage(url: productService.selectedProduct.picture),
                 Positioned(
                     top: 20,
-                    right: 20,
+                    right: 450,
                     child: IconButton(
                       onPressed: () => Navigator.of(context).pop(),
                       icon: Icon(
@@ -54,15 +54,15 @@ class _ProductScreenBody extends StatelessWidget {
                       ),
                     )),
                 Positioned(
-                    top: 60,
-                    right: 20,
+                    top: 20,
+                    right: 40,
                     child: IconButton(
                       onPressed: () async {
                         //TODO: Camara o galeria
 
                         final picker = new ImagePicker();
                         final PickedFile? pickedFile = await picker.getImage(
-                            source: ImageSource.gallery, imageQuality: 100);
+                            source: ImageSource.camera, imageQuality: 100);
 
                         if (pickedFile == null) {
                           print('No seleccionó nada');
@@ -86,17 +86,22 @@ class _ProductScreenBody extends StatelessWidget {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.save_outlined),
-        onPressed: () async {
-          //TODO: Guardar producto
-          if (!productForm.isValidForm()) return;
+        child: productService.isSaving
+            ? CircularProgressIndicator()
+            : Icon(Icons.save_outlined),
+        onPressed: productService.isSaving
+            ? null
+            : () async {
+                //TODO: Guardar producto
 
-          final String? imageUrl = await productService.uploadImage();
+                if (!productForm.isValidForm()) return;
 
-          print(imageUrl);
+                final String? imageUrl = await productService.uploadImage();
 
-          await productService.saveOrCreateProduct(productForm.product);
-        },
+                if (imageUrl != null) productForm.product.picture = imageUrl;
+
+                await productService.saveOrCreateProduct(productForm.product);
+              },
       ),
     );
   }
